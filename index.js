@@ -33,7 +33,6 @@ module.exports = word;
 function word(node, offset) {
   offset = undefined == offset ? 0 : offset;
   if (!node) return '';
-
   var parent = node.parentNode;
   var val = node.nodeValue;
   var start = node;
@@ -46,7 +45,6 @@ function word(node, offset) {
   r.startOffset = 0;
   r.endContainer = start;
   r.endOffset = val.length;
-
   // update the offset to a token-based offset
   if (offset) {
     var sub = val.substr(0, offset);
@@ -67,45 +65,91 @@ function word(node, offset) {
   var word = isWord(toks[offset]);
 
   // traverse both directions
-  traverse(node, r, 'prev', word);
-  traverse(node, r, 'next', word);
+  left(node, r, word);
+  right(node, r, word);
 
   return range(r);
 }
 
 /**
- * Traverse each way
+ * Traverse left
  *
- * @param {Node} range
+ * @param {Node} node
  * @param {Object} range
- * @param {String} dir
+ * @param {Boolean} word
  * @api private
  */
 
-function traverse(node, range, dir, word) {
-  var side = 'prev' == dir ? 'start' : 'end';
+function left(node, range, word) {
   var it = iterator(node);
+  var val = node.nodeValue;
+  var offset = val.length;
+  var toks = [];
   var tok;
-  var len;
 
-  node = it[dir]();
-  toks = [];
-
+  node = it.prev();
   while (node && !isBlock(node)) {
     if (3 != node.nodeType) {
-      node = it[dir]();
+      node = it.prev();
       continue;
     }
 
-    toks = tokenize(node.nodeValue);
-    tok = toks.pop();
-    len = tok.length;
-    if (isWord(tok) != word) return;
-    if (toks.length) range[side + 'Offset'] = node.nodeValue.length - len;
-    else range[side + 'Offset'] = 'prev' == dir ? 0 : len;
+    val = node.nodeValue;
+    offset = val.length;
+    toks = tokenize(val);
 
-    range[side + 'Container'] = node;
-    node = it[dir]();
+    range.startContainer = node;
+    range.startOffset = offset;
+
+    for (var i = toks.length - 1; i >= 0; i--) {
+      tok = toks[i];
+      if (isWord(tok) != word) return;
+      offset -= tok.length;
+      range.startOffset = offset;
+    }
+
+    node = it.prev();
+  }
+}
+
+/**
+ * Traverse right
+ *
+ * @param {Node} node
+ * @param {Object} range
+ * @param {Boolean} word
+ * @api private
+ */
+
+function right(node, range, word) {
+  var it = iterator(node);
+  var val = node.nodeValue;
+  var offset = val.length;
+  var toks = [];
+  var tok;
+
+  node = it.next();
+  while (node && !isBlock(node)) {
+    if (3 != node.nodeType) {
+      node = it.next();
+      continue;
+    }
+
+    val = node.nodeValue;
+    offset = 0;
+    toks = tokenize(val);
+
+    range.endContainer = node;
+    range.endOffset = offset;
+
+    for (var i = 0, len = toks.length; i < len; i++) {
+      tok = toks[i];
+      if (isWord(tok) != word) return;
+      offset += tok.length;
+      range.endOffset = offset;
+    }
+
+    node = it.next();
   }
 }
 

@@ -114,26 +114,32 @@ describe('word(node, offset)', function() {
   })
 
   describe('whitespace on either side', function() {
-    it('should ignore whitespace', function() {
+    it('right: should ignore whitespace', function() {
       el = domify('<p>\n\n      \n         http://<strong>wordpress</strong>.com\n\n      </p>')
       range = word(el.lastChild, 4);
-      console.log(range.toString());
       assert('http://wordpress.com' == range.toString())
     })
 
-    it('should ignore immediate siblings of whitespace', function() {
+    it('middle: should ignore whitespace', function() {
+      el = domify('<p>\n\n      \n         http://<strong>wordpress</strong>.com\n\n      </p>')
+      range = word(el.querySelector('strong').firstChild, 4);
+      assert('http://wordpress.com' == range.toString())
+    })
+
+    it('before: should ignore immediate siblings of whitespace', function() {
       el = domify('<p>  <strong>wordpress.com</strong></p>')
       range = word(el.querySelector('strong').firstChild, 4);
+      console.log(range.toString());
       assert('wordpress.com' == range.toString());
     })
 
-    it('should ignore immediate siblings of whitespace', function() {
+    it('after: should ignore immediate siblings of whitespace', function() {
       el = domify('<p><strong>wordpress.com</strong>  </p>')
       range = word(el.querySelector('strong').firstChild, 4);
       assert('wordpress.com' == range.toString());
     })
 
-    it('should ignore immediate siblings of whitespace', function() {
+    it('both: should ignore immediate siblings of whitespace', function() {
       el = domify('<p>  <strong>wordpress.com</strong>  </p>')
       range = word(el.querySelector('strong').firstChild, 4);
       assert('wordpress.com' == range.toString());
