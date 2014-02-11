@@ -1,0 +1,19 @@
+{
+  "name": "word-at-caret",
+  "repo": "matthewmueller/word-at-caret",
+  "description": "get the word at the caret",
+  "version": "0.0.1",
+  "keywords": [],
+  "dependencies": {
+    "matthewmueller/dom-iterator": "0.2.0"
+  },
+  "development": {
+    "component/assert": "*",
+    "component/domify": "*"
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": [
+    "index.js"
+  ]
+}
