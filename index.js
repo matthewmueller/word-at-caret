@@ -58,9 +58,9 @@ function word(node, offset) {
   // we already have multiple tokens
   if (toks.length > 1) {
     sub = toks.slice(0, offset).join('');
-    r.startOffset = sub.length;
-    r.endOffset = r.startOffset + toks[offset].length;
-    return range(r);
+    if (sub) r.startOffset = sub.length;
+    if (sub != val) r.endOffset = r.startOffset + toks[offset].length;
+    if (sub && sub != val) return range(r);
   }
 
   // traverse both directions
@@ -95,8 +95,7 @@ function traverse(node, range, dir) {
 
     toks = tokenize(node.nodeValue);
     len = toks.pop().length;
-
-    if (toks.length) range[side + 'Offset'] = node.nodeValue - len;
+    if (toks.length) range[side + 'Offset'] = node.nodeValue.length - len;
     else range[side + 'Offset'] = 'prev' == dir ? 0 : len;
 
     range[side + 'Container'] = node;

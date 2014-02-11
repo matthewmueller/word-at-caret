@@ -9,7 +9,8 @@
   },
   "development": {
     "component/assert": "*",
-    "component/domify": "*"
+    "component/domify": "*",
+    "matthewmueller/invisibles": "*"
   },
   "license": "MIT",
   "main": "index.js",

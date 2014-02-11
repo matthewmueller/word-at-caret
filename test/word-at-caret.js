@@ -5,6 +5,7 @@
 var word = require('word-at-caret');
 var assert = require('assert');
 var domify = require('domify');
+var inv = require('invisibles');
 
 /**
  * Tests
@@ -109,6 +110,15 @@ describe('word(node, offset)', function() {
       assert('wordpress.com' == range.toString())
       range = word(strong.firstChild, 9);
       assert('wordpress.com' == range.toString())
+    })
+  })
+
+  describe('whitespace on either side', function() {
+    it('should ignore whitespace', function() {
+      el = domify('<p>\n\n      \n         http://<strong>wordpress</strong>.com\n\n      </p>')
+      range = word(el.lastChild, 4);
+      console.log(inv(range.toString()));
+      assert('http://wordpress.com' == range.toString())
     })
   })
 })
