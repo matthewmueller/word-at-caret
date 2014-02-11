@@ -38,6 +38,10 @@ function word(node, offset) {
   var start = node;
   var toks = [];
   var r = {};
+  var more;
+  var word;
+  var len;
+  var sub;
   var it;
 
   // initials
@@ -47,22 +51,24 @@ function word(node, offset) {
   r.endOffset = val.length;
   // update the offset to a token-based offset
   if (offset) {
-    var sub = val.substr(0, offset);
+    sub = val.substr(0, offset);
     offset = tokenize(sub).length - 1;
   }
 
   // tokenize the nodeValue
   toks = tokenize(val);
+  len = toks.length;
 
   // we already have multiple tokens
-  if (toks.length > 1) {
+  if (len > 1) {
     sub = toks.slice(0, offset).join('');
-    if (sub) r.startOffset = sub.length;
-    if (sub != val) r.endOffset = r.startOffset + toks[offset].length;
-    if (sub && sub != val) return range(r);
+    more = offset < len - 1;
+    if (offset) r.startOffset = sub.length;
+    if (more) r.endOffset = r.startOffset + toks[offset].length;
+    if (offset && more) return range(r);
   }
 
-  var word = isWord(toks[offset]);
+  word = isWord(toks[offset]);
 
   // traverse both directions
   left(node, r, word);
