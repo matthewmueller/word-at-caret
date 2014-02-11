@@ -32,7 +32,7 @@ module.exports = word;
 
 function word(node, offset) {
   offset = undefined == offset ? 0 : offset;
-  if (!node) return '';
+  if (!node || !node.nodeValue) return '';
   var parent = node.parentNode;
   var val = node.nodeValue;
   var start = node;
