@@ -4,6 +4,7 @@
 
 var iterator = require('dom-iterator');
 var rchunk = /(\s+|\S+)/g;
+var rword = /^\S+$/;
 
 /**
  * Regex for block level elements
@@ -63,9 +64,11 @@ function word(node, offset) {
     if (sub && sub != val) return range(r);
   }
 
+  var word = isWord(toks[offset]);
+
   // traverse both directions
-  traverse(node, r, 'prev');
-  traverse(node, r, 'next');
+  traverse(node, r, 'prev', word);
+  traverse(node, r, 'next', word);
 
   return range(r);
 }
@@ -79,9 +82,10 @@ function word(node, offset) {
  * @api private
  */
 
-function traverse(node, range, dir) {
+function traverse(node, range, dir, word) {
   var side = 'prev' == dir ? 'start' : 'end';
   var it = iterator(node);
+  var tok;
   var len;
 
   node = it[dir]();
@@ -94,7 +98,9 @@ function traverse(node, range, dir) {
     }
 
     toks = tokenize(node.nodeValue);
-    len = toks.pop().length;
+    tok = toks.pop();
+    len = tok.length;
+    if (isWord(tok) != word) return;
     if (toks.length) range[side + 'Offset'] = node.nodeValue.length - len;
     else range[side + 'Offset'] = 'prev' == dir ? 0 : len;
 
@@ -150,4 +156,16 @@ function tokenize(str) {
 
 function isBlock(node) {
   return rblock.test(node.nodeName);
+}
+
+/**
+ * Is a word
+ *
+ * @param {String} str
+ * @return {Boolean}
+ * @api private
+ */
+
+function isWord(str) {
+  return rword.test(str);
 }
