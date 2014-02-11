@@ -49,6 +49,7 @@ function word(node, offset) {
   r.startOffset = 0;
   r.endContainer = start;
   r.endOffset = val.length;
+
   // update the offset to a token-based offset
   if (offset) {
     sub = val.substr(0, offset);
@@ -59,16 +60,18 @@ function word(node, offset) {
   toks = tokenize(val);
   len = toks.length;
 
+  word = isWord(toks[offset]);
+
   // we already have multiple tokens
   if (len > 1) {
     sub = toks.slice(0, offset).join('');
     more = offset < len - 1;
     if (offset) r.startOffset = sub.length;
-    if (more) r.endOffset = r.startOffset + toks[offset].length;
-    if (offset && more) return range(r);
+    else left(node, r, word);
+    if (more) r.endOffset = sub.length + toks[offset].length;
+    else right(node, r, word);
+    return range(r);
   }
-
-  word = isWord(toks[offset]);
 
   // traverse both directions
   left(node, r, word);

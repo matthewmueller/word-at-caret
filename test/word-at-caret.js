@@ -95,6 +95,12 @@ describe('word(node, offset)', function() {
       range = word(el.lastChild, 4);
       assert('http://wordpress.com' == range.toString())
     });
+
+    it('should not cross space', function() {
+      el = domify('<p><em>blah</em> blah</p>');
+      range = word(el.lastChild, 5);
+      assert('blah' == range.toString())
+    });
   })
 
   describe('block elements', function() {
