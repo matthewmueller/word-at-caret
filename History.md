@@ -1,4 +1,10 @@
 
+0.1.0 / 2014-02-11
+==================
+
+ * improve offset checking
+ * fix: when space is on either side
+
 0.0.3 / 2014-02-11
 ==================
 
