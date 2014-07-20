@@ -1,7 +1,7 @@
 {
   "name": "word-at-caret",
   "description": "get the word at the caret",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": "Matt Mueller <mattmuelle@gmail.com> (mat.io)",
   "keywords": [],
   "dependencies": {

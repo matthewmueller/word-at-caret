@@ -1,4 +1,11 @@
 
+0.1.3 / 2014-07-20
+==================
+
+ * component, package: update "dom-iterator" to v0.3.0
+ * add package.json file
+ * component: update "dom-iterator" to v0.2.1
+
 0.1.2 / 2014-02-12
 ==================
 
