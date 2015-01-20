@@ -2,10 +2,10 @@
   "name": "word-at-caret",
   "repo": "matthewmueller/word-at-caret",
   "description": "get the word at the caret",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "keywords": [],
   "dependencies": {
-    "matthewmueller/dom-iterator": "0.2.0"
+    "matthewmueller/dom-iterator": "0.3.0"
   },
   "development": {
     "component/assert": "*",
